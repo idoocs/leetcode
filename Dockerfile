@@ -1,20 +1,11 @@
-# Use Node.js version 14 as the base image
-FROM node:14
+# 使用官方的 Nginx 镜像作为基础镜像
+FROM nginx:alpine
 
-# Set the working directory inside the container
-WORKDIR /app
+# 将构建的静态文件拷贝到 Nginx 的默认站点目录
+COPY site /usr/share/nginx/html
 
-# Copy package.json and package-lock.json (if present) to the working directory
-COPY package*.json ./
-
-# Install npm dependencies
-RUN npm install
-
-# Copy all files from the current directory to the working directory in the container
-COPY . .
-
-# Expose port 80 to allow communication to/from the container
+# 暴露 80 端口
 EXPOSE 80
 
-# Specify the command to run the application
-CMD ["npm", "start"]
+# 默认启动 Nginx 服务
+CMD ["nginx", "-g", "daemon off;"]
